@@ -8,6 +8,7 @@ const achievements = [
     year: "2012",
     description: "Awarded by the Government of India for distinguished contribution to Indian classical music.",
     accent: "var(--gold)",
+    gradient: "linear-gradient(135deg, hsl(var(--gold) / 0.15), hsl(var(--gold) / 0.05))",
   },
   {
     icon: Award,
@@ -15,6 +16,7 @@ const achievements = [
     year: "2008",
     description: "National honour for lifetime achievement in the performing arts.",
     accent: "var(--saffron)",
+    gradient: "linear-gradient(135deg, hsl(var(--saffron) / 0.15), hsl(var(--saffron) / 0.05))",
   },
   {
     icon: Globe,
@@ -22,6 +24,7 @@ const achievements = [
     year: "2015",
     description: "Recognized for preserving intangible cultural heritage through music.",
     accent: "var(--emerald)",
+    gradient: "linear-gradient(135deg, hsl(var(--emerald) / 0.15), hsl(var(--emerald) / 0.05))",
   },
   {
     icon: Star,
@@ -29,6 +32,7 @@ const achievements = [
     year: "2019",
     description: "Nominated for Best World Music Album for 'Ragas at Dawn'.",
     accent: "var(--ruby)",
+    gradient: "linear-gradient(135deg, hsl(var(--ruby) / 0.15), hsl(var(--ruby) / 0.05))",
   },
 ];
 
@@ -37,11 +41,30 @@ const AchievementsSection = () => {
 
   return (
     <section ref={ref} className="section-reveal section-dark-rich py-24 lg:py-32 relative overflow-hidden">
-      {/* Decorative particles */}
+      {/* Colorful particles */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[10%] left-[5%] w-2 h-2 rounded-full bg-gold/20 animate-bounce-gentle" />
-        <div className="absolute top-[30%] right-[8%] w-1.5 h-1.5 rounded-full bg-saffron/20 animate-bounce-gentle" style={{ animationDelay: "0.5s" }} />
-        <div className="absolute bottom-[20%] left-[15%] w-1 h-1 rounded-full bg-gold/15 animate-bounce-gentle" style={{ animationDelay: "1s" }} />
+        {[
+          { top: "8%", left: "5%", color: "var(--gold)", size: 6 },
+          { top: "15%", left: "90%", color: "var(--saffron)", size: 4 },
+          { top: "70%", left: "10%", color: "var(--ruby)", size: 5 },
+          { top: "80%", left: "85%", color: "var(--emerald)", size: 4 },
+          { top: "45%", left: "50%", color: "var(--violet)", size: 3 },
+          { top: "30%", left: "70%", color: "var(--gold)", size: 5 },
+        ].map((p, i) => (
+          <div
+            key={i}
+            className="particle"
+            style={{
+              top: p.top,
+              left: p.left,
+              width: p.size,
+              height: p.size,
+              background: `hsl(${p.color})`,
+              animationDelay: `${i * 1.3}s`,
+              boxShadow: `0 0 ${p.size * 4}px hsl(${p.color} / 0.4)`,
+            }}
+          />
+        ))}
       </div>
 
       <div className="container mx-auto px-6 lg:px-16">
@@ -52,28 +75,37 @@ const AchievementsSection = () => {
             <div className="gold-divider" />
           </div>
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1]">
-            Honours & <span className="text-gradient-gold">Accolades</span>
+            Honours & <span className="text-gradient-rainbow">Accolades</span>
           </h2>
+          <p className="text-sm opacity-50 max-w-md mx-auto">A lifetime of dedication recognized on the world stage</p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {achievements.map((item, i) => (
             <div
               key={item.title}
-              className={`stagger-${i + 1} card-lift gold-glow rounded-lg p-8 text-center space-y-4 shimmer group`}
+              className={`stagger-${i + 1} card-lift rounded-2xl p-8 text-center space-y-4 shimmer group relative overflow-hidden`}
               style={{
-                background: "linear-gradient(145deg, hsl(30 20% 13%), hsl(30 20% 10%))",
-                border: "1px solid hsl(var(--gold) / 0.12)",
+                background: item.gradient,
+                border: `1px solid hsl(${item.accent} / 0.2)`,
               }}
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full relative group-hover:animate-glow-pulse transition-all duration-500" style={{ background: `hsl(${item.accent} / 0.12)` }}>
-                <item.icon className="w-7 h-7 transition-transform duration-500 group-hover:scale-110" style={{ color: `hsl(${item.accent})` }} />
+              {/* Top glow bar */}
+              <div className="absolute top-0 left-0 right-0 h-1 opacity-60 group-hover:opacity-100 transition-opacity" style={{ background: `linear-gradient(90deg, transparent, hsl(${item.accent}), transparent)` }} />
+
+              {/* Icon with ripple effect */}
+              <div className="relative inline-flex items-center justify-center w-18 h-18 rounded-full transition-all duration-500 group-hover:scale-110" style={{ background: `hsl(${item.accent} / 0.15)` }}>
+                <item.icon className="w-8 h-8 transition-all duration-500 group-hover:drop-shadow-lg" style={{ color: `hsl(${item.accent})` }} />
+                {/* Ripple */}
+                <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 animate-ripple" style={{ border: `2px solid hsl(${item.accent} / 0.3)` }} />
               </div>
-              <span className="block text-xs tracking-widest uppercase font-heading" style={{ color: `hsl(${item.accent})` }}>{item.year}</span>
-              <h3 className="font-heading text-lg font-semibold group-hover:text-gold transition-colors duration-300">{item.title}</h3>
+
+              <span className="block text-xs tracking-widest uppercase font-heading font-bold" style={{ color: `hsl(${item.accent})` }}>{item.year}</span>
+              <h3 className="font-heading text-lg font-semibold transition-colors duration-300" style={{ color: "hsl(var(--cream))" }}>{item.title}</h3>
               <p className="text-sm leading-relaxed opacity-60">{item.description}</p>
-              {/* Bottom accent line */}
-              <div className="w-12 h-0.5 mx-auto rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `hsl(${item.accent})` }} />
+
+              {/* Bottom accent */}
+              <div className="w-0 h-0.5 mx-auto rounded-full group-hover:w-16 transition-all duration-700" style={{ background: `hsl(${item.accent})` }} />
             </div>
           ))}
         </div>
